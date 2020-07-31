@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title%} Payment Status{% endblock %}
+{% block body %}
+
+<div class="container">
+
+    <form action="https://securegw-stage.paytm.in/order/status" method="POST">
+           <h2>Payment Status regarding your Order_ID {{response.ORDERID}}</h2>
+            {% if response.RESPCODE == '01'  %}
+            ORDER SUCCESS
+
+        {% else %}
+            ORDER FAILURE
+        {% endif %}
+        </form>
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+   localStorage.clear();
+</script>
+{% endblock %}

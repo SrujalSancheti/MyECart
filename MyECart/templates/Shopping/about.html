@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block head %}
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+{% endblock head %}
+{% block title %} About Us {% endblock title %}
+{% block body %} 
+
+{% load static %}
+
+
+<section class="jumbotron text-center">
+    <div class="container">
+      <h1>MyECart</h1>
+      <p class="lead text-muted">Welcome All, the founder of <b>MyECart</b> is <b><i>Mr. Srujal Sancheti</i></b>.He faced a problem in COVID 19 Pandemic of going Shop for buying groceries. Due to lockdown, many people didnt get the food. So, to solve the problem he made this App. By using this app, user need not to go out to buy groceries. All the item will be delivered at your door step.</p>
+      <p>To know more about  <b><i>Mr. Srujal Sancheti</i></b> , please click the button below.</p>
+      <p>
+        <a href="https://www.blogger.com" class="btn btn-primary my-2">My Blog</a>
+        <a href="/Shopping" class="btn btn-secondary my-2">Continue Shopping</a>
+      </p>
+    </div>
+  </section>
+
+  <div class="container ml-4">
+    <div class="row">
+        <div class="col-md-4 ">
+            <div class="card" style="width: 18rem;">
+                <img src="{% static '/images/pipes.jpg' %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img src="{% static '/images/pipes.jpg' %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img src="{% static '/images/pipes.jpg' %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock body %}

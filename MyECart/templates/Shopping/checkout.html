@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %} Checkout Items {% endblock %}
+
+{% block css %}
+img {
+    height: 200px;
+    width: 315px;
+}
+{% endblock css %}
+
+{% block body %}
+<div class="container-fluid mb-3">
+    <div class="col">
+        <div class="alert alert-primary" role="alert">
+  <h4>Step 1: Please review your cart items befour placing order.</h4>
+  </div>
+        <div class="my-4">
+            <ul id="items">
+            </ul>
+            <a class="btn btn-outline-primary float-right" > Total Price:<span name="totalPrice" id="totalPrice"> </span></a>
+        </div>
+    </div>
+</div>
+
+<br><br>
+<div class="container-fluid">
+    <div class="col">
+    <div class="alert alert-primary" role="alert">
+        <h4>Step 2: Please Enter Shipping Details</h4>
+        </div>
+        <form action="/Shopping/checkout/" method="POST">{% csrf_token %}
+            <input type="hidden" name="itemsJson" id="itemsJson">
+            <input type="hidden" name="amount" id="amount">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputName">Name</label>
+                    <input type="name" class="form-control" id="inputName" name="inputName" placeholder="Name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email Address">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputAddress2">Phone</label>
+                    <input type="tel" class="form-control" id="inputPhone" name="inputPhone" placeholder="Mobile Number">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputAddress2">Alternate Phone</label>
+                    <input type="tel" class="form-control" id="inputAltPhone" name="inputAltPhone" placeholder=" Alternate Mobile Number">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" id="inputAddress" name="inputAddress" placeholder="ex. Gandhi Wada , Pussy Road">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress2">Address 2</label>
+                <input type="text" class="form-control" id="inputAddress2" name="inputAddress2" placeholder="LandMark">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">City</label>
+                    <input type="text" class="form-control" id="inputCity" name="inputCity" placeholder="City">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputState">State</label>
+                    <input type="text" class="form-control" id="inputState" name="inputState" placeholder="State">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" id="inputZip" name="inputZip" placeholder="PinCode">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+{% endblock body %}
+{% block js %}
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+var sum = 0;
+var totalPrice = 0;
+if ($.isEmptyObject(cart)) {
+    myStr = `<p>Please Enter Items in Cart befour checkout</p>`
+    $('#items').append(myStr);
+} else {
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice = cart[item][2];
+        let image = cart[item][3];
+        totalPrice = totalPrice + qty*itemPrice;
+        sum = qty + sum;
+        console.log(sum);
+        myStr = `
+                <div class="container my-2 mr-5">
+                    <div class="row">
+                        <div class="col-md-4 col-lg col-sm-4">
+                            <img src="${image}" class="h-100 w-100">
+                        </div>
+                        <div class="col-md-8">
+                            <div>
+                                     <b>   ${name} </b>
+                            </div>
+                            <div>
+                                Quantity: ${qty}
+                            </div>
+                        </div>
+                    </div>
+                </div><hr>`
+                
+        $('#items').append(myStr);
+    }
+}
+document.getElementById('cart').innerHTML = sum;
+document.getElementById('totalPrice').innerHTML = totalPrice;
+
+$('#itemsJson').val(JSON.stringify(cart));
+
+{% if thank %}
+alert("Thank you for ordering from SB Cart . You can track your order by this ID : {{ id }} .");
+localStorage.clear();
+document.location="/shop";
+{% endif %}
+$('#amount').val($('#totalPrice').html())
+
+</script>
+{% endblock %}

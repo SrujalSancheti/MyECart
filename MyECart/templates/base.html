@@ -1,0 +1,197 @@
+  {% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>{% block title %}{% endblock %}</title>
+      <style>
+
+         {% block css %}{% endblock css %}
+    </style>
+  {% block head %}
+  {% endblock head %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">My Awesome Cart</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/Shopping/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/Shopping/tracker">Tracker</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/Shopping/contact">Contact Us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/Shopping/about">About Us</a>
+      </li>
+      <div>
+        <a type="button" href="/admin" class="btn btn-outline-success my-2 my-sm-0 ml-2" >Admin Panel</a>
+      </div>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" method="get" action="/Shopping/search/">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+  {% if user.is_authenticated %}
+    <ul class="navbar-nav mx-2">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Welcome {{request.user}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/Shopping/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+    <button type="button" class="btn btn-secondary mx-2" id="cartpop" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" data-content="Cart">
+          Cart(<span id="cart">0</span>)<i class="fa fa-shopping-cart" style="font-size:24px"></i>
+    </button>
+
+  {% else %}
+    <!-- SignUp button trigger modal -->
+    <button type="button" class="btn btn-outline-primary ml-2  my-2" data-toggle="modal" data-target="#signupmodal">
+    Sign Up
+    </button>
+
+    <!-- Login button trigger modal -->
+    <button type="button" class="btn btn-outline-primary ml-2 my-2" data-toggle="modal" data-target="#loginmodal">
+    Login
+    </button>
+  {% endif %}
+
+    
+  </div>
+</nav>
+{% for message in messages %}
+  <div class="alert alert-{{ message.tags }} mb-0 alert-dismissible fade show" role="alert">
+    <strong>Message :</strong>{{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+{% endfor %}
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signupmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signuptitle">SignUp Here</h5>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/Shopping/signup">{% csrf_token %}
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Choose Unique Username(Lowercase and alphanumeric)" required>
+          </div>
+          <div class="row my-3">
+            <div class="col">
+              <label for="fname">First Name</label>
+              <input type="text" class="form-control" placeholder="First Name" name="fname" id="fname" required>
+            </div>
+            <div class="col">
+              <label for="lname">Last Name</label>
+              <input type="text" class="form-control" placeholder="Last name" name="lname" id="lname" required> 
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="123@xyz.com" required>
+          </div>
+          <div class="form-group">
+            <label for="pass1">Password</label>
+            <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Choose Password" required>
+          </div>
+          <div class="form-group">
+            <label for="pass2">Reenter Password</label>
+            <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Re-enter Password" required>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logintitle">Login Here</h5>
+      </div>
+        <div class="modal-body">
+              <form method="POST" action="/Shopping/login"> {% csrf_token %}
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder=" Username" required>
+            </div>
+            <div class="form-group">
+              <label for="pass1">Password</label>
+              <input type="password" class="form-control" id="loginpass" name="loginpass" placeholder="Password" required >
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block body %}{% endblock body %}
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+ <script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <!--  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">-->
+
+
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+var sum = 0;
+
+for (item in cart) {
+        let qty = cart[item][0];
+        sum = qty + sum;
+        
+        }
+        console.log(sum);   
+        document.getElementById('cart').innerHTML = sum
+</script>
+{% block js %}
+{% endblock js %}
+
+
+
+  </body>
+</html>
